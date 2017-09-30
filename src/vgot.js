@@ -14,14 +14,8 @@ window.vgot = {};
 	 * @returns {Array}
 	 */
 	common.getElementsByClassName = function(className, tagName, root) {
-		if (!tagName) {
-			tagName = "*";
-		}
-
-		if (!root) {
-			root = document;
-		}
-
+		if (!tagName) tagName = "*";
+		if (!root) root = document;
 		var elements = root.getElementsByTagName(tagName);
 		var matchElements = [];
 
@@ -45,7 +39,7 @@ window.vgot = {};
 	 * @return array 所有生成的脚本元素对象数组
 	 */
 	common.loadScript = function(scripts, callback) {
-		if(typeof(scripts) != "object") var scripts = [scripts];
+		if (typeof(scripts) != "object") var scripts = [scripts];
 		var HEAD = document.getElementsByTagName("head").item(0) || document.documentElement, s = new Array(), loaded = 0;
 		for(var i=0; i<scripts.length; i++) {
 			s[i] = document.createElement("script");
@@ -60,7 +54,7 @@ window.vgot = {};
 			s[i].setAttribute("src",scripts[i]);
 			HEAD.appendChild(s[i]);
 		}
-	}
+	};
 
 	/**
 	 * 发起一个JSONP请求
@@ -83,6 +77,63 @@ window.vgot = {};
 		script.setAttribute("type", "text/javascript");
 		document.body.appendChild(script);
 		script.setAttribute("src", url);
-	}
+	};
+
+	/**
+	 * @param {string} name
+	 * @param {string} value
+	 * @param {int} [expire]
+	 * @param {string} [path]
+	 */
+	common.setCookie = function(name, value, expire, path) {
+		var exp  = new Date();
+		if (expire == undefined) {expire = 0;}
+		exp.setTime(exp.getTime() + expire * 1000);
+		if (path == undefined) {path = "/";}
+		document.cookie = name + "=" + encodeURIComponent(value) + ";path=" + path + ";expires=" + exp.toGMTString();
+	};
+
+	/**
+	 * @param {string} name
+	 * @returns {null|string}
+	 */
+	common.getCookie = function(name) {
+		var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
+		if(arr != null) return decodeURIComponent(arr[2]); return null;
+	};
+
+	/**
+	 * @param {string} name
+	 */
+	common.delCookie = function(name) {
+		var exp = new Date();
+		exp.setTime(exp.getTime() - 1);
+		var cval = this.get(name);
+		if (cval!=null) document.cookie= name + "=" + cval + ";expires=" + exp.toGMTString();
+	};
+
+	/**
+	 * @param {string} text
+	 * @returns {string}
+	 */
+	common.urlencode = function(text) {
+		return text.replace(/:/g,'%3A').replace(/\//g,'%2F').replace(/\./g,'%2E').replace(/\?/g,'%3F').replace(/\=/g,'%3D').replace(/&/g,'%26').replace(/#/g,'%23').replace(/\+/g,'%2B').replace(/ /g,'+');
+	};
+
+	/**
+	 * @param {string} a
+	 * @returns {number}
+	 */
+	common.dstrlen = function(a) {
+		var b = 0;
+		for (var i=0; i<a.length; i++) {
+			if (a.charCodeAt(i) < 0 || a.charCodeAt(i) > 255) {
+				b = b + 2;
+			} else {
+				b = b + 1;
+			}
+		}
+		return b;
+	};
 
 })(window.vgot);
