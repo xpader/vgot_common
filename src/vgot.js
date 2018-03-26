@@ -3,7 +3,7 @@
  */
 window.vgot = {};
 
-(function(common) {
+(function(X) {
 
 	/**
 	 * 使用类名查找元素
@@ -13,7 +13,7 @@ window.vgot = {};
 	 * @param {Node} [root]
 	 * @returns {Array}
 	 */
-	common.getElementsByClassName = function(className, tagName, root) {
+	X.getElementsByClassName = function(className, tagName, root) {
 		if (!tagName) tagName = "*";
 		if (!root) root = document;
 		var elements = root.getElementsByTagName(tagName);
@@ -38,9 +38,9 @@ window.vgot = {};
 	 * @param {Function} callback 成功后回调的函数
 	 * @return array 所有生成的脚本元素对象数组
 	 */
-	common.loadScript = function(scripts, callback) {
-		if (typeof(scripts) != "object") var scripts = [scripts];
-		var HEAD = document.getElementsByTagName("head").item(0) || document.documentElement, s = new Array(), loaded = 0;
+	X.loadScript = function(scripts, callback) {
+		if (typeof(scripts) != "object") scripts = [scripts];
+		var HEAD = document.getElementsByTagName("head").item(0) || document.documentElement, s = [], loaded = 0;
 		for(var i=0; i<scripts.length; i++) {
 			s[i] = document.createElement("script");
 			s[i].setAttribute("type","text/javascript");
@@ -62,15 +62,15 @@ window.vgot = {};
 	 * @param {string} url
 	 * @param {Function} callback 请求成功时执行些回调，数据将原样传给此回调
 	 */
-	common.jsonp = function(url, callback) {
+	X.jsonp = function(url, callback) {
 		var func = "callback" + Math.random().toString().substr(2), script;
 		url += ((url.indexOf("?") == -1) ? "?" : "&") + "callback=" + func;
 
 		window[func] = function (ret) {
-			callback(ret);
 			document.body.removeChild(script);
 			script = null;
 			delete window[callback];
+			callback(ret);
 		};
 
 		script = document.createElement("script");
@@ -85,7 +85,7 @@ window.vgot = {};
 	 * @param {int} [expire]
 	 * @param {string} [path]
 	 */
-	common.setCookie = function(name, value, expire, path) {
+	X.setCookie = function(name, value, expire, path) {
 		var exp  = new Date();
 		if (expire == undefined) {expire = 0;}
 		exp.setTime(exp.getTime() + expire * 1000);
@@ -97,7 +97,7 @@ window.vgot = {};
 	 * @param {string} name
 	 * @returns {null|string}
 	 */
-	common.getCookie = function(name) {
+	X.getCookie = function(name) {
 		var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
 		if(arr != null) return decodeURIComponent(arr[2]); return null;
 	};
@@ -105,7 +105,7 @@ window.vgot = {};
 	/**
 	 * @param {string} name
 	 */
-	common.delCookie = function(name) {
+	X.delCookie = function(name) {
 		var exp = new Date();
 		exp.setTime(exp.getTime() - 1);
 		var cval = this.get(name);
@@ -116,7 +116,7 @@ window.vgot = {};
 	 * @param {string} text
 	 * @returns {string}
 	 */
-	common.urlencode = function(text) {
+	X.urlencode = function(text) {
 		return text.replace(/:/g,'%3A').replace(/\//g,'%2F').replace(/\./g,'%2E').replace(/\?/g,'%3F').replace(/\=/g,'%3D').replace(/&/g,'%26').replace(/#/g,'%23').replace(/\+/g,'%2B').replace(/ /g,'+');
 	};
 
@@ -124,7 +124,7 @@ window.vgot = {};
 	 * @param {string} a
 	 * @returns {number}
 	 */
-	common.dstrlen = function(a) {
+	X.dstrlen = function(a) {
 		var b = 0;
 		for (var i=0; i<a.length; i++) {
 			if (a.charCodeAt(i) < 0 || a.charCodeAt(i) > 255) {
