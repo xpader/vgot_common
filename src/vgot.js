@@ -1,9 +1,7 @@
 /**
  * Created by pader on 2017/9/30.
  */
-window.vgot = {};
-
-(function(X) {
+(function(W) {
 
 	/**
 	 * 使用类名查找元素
@@ -13,7 +11,7 @@ window.vgot = {};
 	 * @param {Node} [root]
 	 * @returns {Array}
 	 */
-	X.getElementsByClassName = function(className, tagName, root) {
+	W.getElementsByClassName = function(className, tagName, root) {
 		if (!tagName) tagName = "*";
 		if (!root) root = document;
 		var elements = root.getElementsByTagName(tagName);
@@ -38,7 +36,7 @@ window.vgot = {};
 	 * @param {Function} callback 成功后回调的函数
 	 * @return array 所有生成的脚本元素对象数组
 	 */
-	X.loadScript = function(scripts, callback) {
+	W.loadScript = function(scripts, callback) {
 		if (typeof(scripts) != "object") scripts = [scripts];
 		var HEAD = document.getElementsByTagName("head").item(0) || document.documentElement, s = [], loaded = 0;
 		for(var i=0; i<scripts.length; i++) {
@@ -62,7 +60,7 @@ window.vgot = {};
 	 * @param {string} url
 	 * @param {Function} callback 请求成功时执行些回调，数据将原样传给此回调
 	 */
-	X.jsonp = function(url, callback) {
+	W.jsonp = function(url, callback) {
 		var func = "callback" + Math.random().toString().substr(2), script;
 		url += ((url.indexOf("?") == -1) ? "?" : "&") + "callback=" + func;
 
@@ -85,7 +83,7 @@ window.vgot = {};
 	 * @param {int} [expire]
 	 * @param {string} [path]
 	 */
-	X.setCookie = function(name, value, expire, path) {
+	W.setCookie = function(name, value, expire, path) {
 		var exp  = new Date();
 		if (expire == undefined) {expire = 0;}
 		exp.setTime(exp.getTime() + expire * 1000);
@@ -97,7 +95,7 @@ window.vgot = {};
 	 * @param {string} name
 	 * @returns {null|string}
 	 */
-	X.getCookie = function(name) {
+	W.getCookie = function(name) {
 		var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
 		if(arr != null) return decodeURIComponent(arr[2]); return null;
 	};
@@ -105,7 +103,7 @@ window.vgot = {};
 	/**
 	 * @param {string} name
 	 */
-	X.delCookie = function(name) {
+	W.delCookie = function(name) {
 		var exp = new Date();
 		exp.setTime(exp.getTime() - 1);
 		var cval = this.get(name);
@@ -116,7 +114,7 @@ window.vgot = {};
 	 * @param {string} text
 	 * @returns {string}
 	 */
-	X.urlencode = function(text) {
+	W.urlencode = function(text) {
 		return text.replace(/:/g,'%3A').replace(/\//g,'%2F').replace(/\./g,'%2E').replace(/\?/g,'%3F').replace(/\=/g,'%3D').replace(/&/g,'%26').replace(/#/g,'%23').replace(/\+/g,'%2B').replace(/ /g,'+');
 	};
 
@@ -124,7 +122,7 @@ window.vgot = {};
 	 * @param {string} a
 	 * @returns {number}
 	 */
-	X.dstrlen = function(a) {
+	W.dstrlen = function(a) {
 		var b = 0;
 		for (var i=0; i<a.length; i++) {
 			if (a.charCodeAt(i) < 0 || a.charCodeAt(i) > 255) {
@@ -136,4 +134,4 @@ window.vgot = {};
 		return b;
 	};
 
-})(window.vgot);
+})(window);
