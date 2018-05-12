@@ -50,11 +50,11 @@ module.exports = {
 	},
 	/**
 	 * 更可理解化的时间戳格式化
-	 * @param {Number} timestamp 精确到毫秒的时间戳
+	 * @param {Number} timestamp 秒级时间戳
 	 * @return {string}
 	 */
 	fmtime: function(timestamp) {
-		var tl = this.now() - timestamp;
+		var tl = this.now(true) - timestamp;
 
 		if (tl < 60) {
 			return '刚刚';
@@ -66,17 +66,48 @@ module.exports = {
 			return Math.ceil(tl / 60) + '分钟前';
 		} else {
 			timestamp *= 1000;
-			var date = new Date(timestamp);
+			var date = new Date(timestamp),
+				today = this.mkdate(0, 0, 0).getTime();
 
-			if (timestamp > (new Date()).setHours(0, 0, 0, 0)) {
-				return '今天 ' + this.format('HH:mm', date);
-			} else if (timestamp >= (new Date()).setHours(0, 0, 0, 0)-86400000) {
+			if (timestamp >= today) {
+				return this.format('HH:mm', date);
+			} else if (timestamp >= today - 86400000) {
 				return '昨天 ' + this.format('HH:mm', date);
-			} else if (timestamp >= (new Date()).setMonth(0, 1).setHours(0, 0, 0, 0)) {
+			} else if (timestamp >= this.mkdate(0, 0, 0, 0, 1).getTime()) {
 				return this.format('M月d日 HH:mm', date);
 			} else {
 				return this.format('yyyy-MM-dd', date);
 			}
 		}
+	},
+	mkdate: function(hour, minute, second, month, date, year) {
+		var d = new Date();
+
+		if (!isNaN(hour)) {
+			d.setHours(hour);
+		}
+
+		if (!isNaN(minute)) {
+			d.setMinutes(minute);
+		}
+
+		if (!isNaN(second)) {
+			d.setSeconds(second);
+			d.setMilliseconds(0);
+		}
+
+		if (!isNaN(month)) {
+			d.setMonth(month);
+		}
+
+		if (!isNaN(date)) {
+			d.setDate(date);
+		}
+
+		if (!isNaN(year)) {
+			d.setFullYear(year);
+		}
+
+		return d;
 	}
 };
