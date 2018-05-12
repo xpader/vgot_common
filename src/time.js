@@ -80,6 +80,61 @@ module.exports = {
 			}
 		}
 	},
+	formatSeconds: function(seconds) {
+		var starr = [];
+
+		var years = Math.floor(seconds / 31536000);
+		if (years > 0) {
+			starr.push(years + "年");
+			seconds -= years * 31536000;
+		}
+
+		var months = Math.floor(seconds / 2628000);
+		if (years > 0 || months > 0) {
+			if (months > 0) {
+				starr.push(months + "个月");
+			}
+			seconds -= months * 2628000;
+		}
+
+		var weeks = Math.floor(seconds / 604800);
+		if (years > 0 || months > 0 || weeks > 0) {
+			if (weeks > 0) {
+				starr.push(weeks + "个星期");
+			}
+			seconds -= weeks * 604800;
+		}
+
+		var days = Math.floor(seconds / 86400);
+		if (months > 0 || weeks > 0 || days > 0) {
+			if (days > 0) {
+				starr.push(days + "天");
+			}
+			seconds -= days * 86400;
+		}
+
+		var hours = Math.floor(seconds / 3600);
+		if (days > 0 || hours > 0) {
+			if (hours > 0) {
+				starr.push(hours + "个小时");
+			}
+			seconds -= hours * 3600;
+		}
+
+		var minutes = Math.floor(seconds / 60);
+		if (days > 0 || hours > 0 || minutes > 0) {
+			if (minutes > 0) {
+				starr.push(minutes + "分钟");
+			}
+			seconds -= minutes * 60;
+		}
+
+		if (seconds > 0) {
+			starr.push(seconds + "秒");
+		}
+
+		return starr.join('，');
+	},
 	mkdate: function(hour, minute, second, month, date, year) {
 		var d = new Date();
 
