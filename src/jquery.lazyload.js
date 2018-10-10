@@ -52,6 +52,9 @@
 						o.attr("src", o.data('src')).addClass('lazyload-loaded').removeAttr("data-src");
 					}
 					o.removeData('lazyload');
+				} else if (!document.body.contains(obj)) {
+					cache.splice(i, 1);
+					i--;
 				}
 			}
 
