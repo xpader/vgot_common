@@ -137,3 +137,38 @@ function dstrlen(a) {
 	}
 	return b;
 }
+
+/**
+ * 根据输入的字节数显示可读形式的文件大小
+ *
+ * @param {int} bytes
+ * @returns {string}
+ */
+function readableSize(bytes) {
+	var filesizeUnits = ['Bytes','KB','MB','GB','TB','PB','EB','ZB','YB'];
+	var base = 1024;
+	if (bytes) {
+		var i = 0;
+		if (bytes >= base) {
+			var a = bytes;
+			while(1) { a /= base; i++; if(a < base) break; }
+		}
+		return parseFloat((bytes/Math.pow(base,i)).toFixed(2)) + ' ' + filesizeUnits[i];
+	} else return '0 Byte';
+}
+
+/**
+ * 获取上传文件的 Object URL
+ * @param file
+ * @returns {string|null}
+ */
+function getObjectURL(file) {
+	if (window.createObjectURL) { // basic
+		return window.createObjectURL(file) ;
+	} else if (window.URL) { // mozilla(firefox)
+		return window.URL.createObjectURL(file) ;
+	} else if (window.webkitURL) { // webkit or chrome
+		return window.webkitURL.createObjectURL(file) ;
+	}
+	return null;
+}
